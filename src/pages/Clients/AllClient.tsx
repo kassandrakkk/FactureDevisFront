@@ -33,7 +33,7 @@ const ClientList: React.FC = () => {
         <header className="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
           <h2 className="text-3xl font-bold text-gray-900">Liste des Clients</h2>
           <button
-            onClick={() => navigate('/add-client')}
+            onClick={() => navigate('/CreateClient')}
             className="px-6 py-3 bg-blue-700 text-white rounded-lg shadow-md hover:bg-blue-800 transition-colors"
           >
             + Ajouter un Client
