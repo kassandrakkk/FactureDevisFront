@@ -12,7 +12,7 @@ const TotalSection: React.FC<TotalSectionProps> = ({ montantTotal }) => (
       <span>{montantTotal} FCFA</span>
     </div>
     <div className="flex justify-between mb-2">
-      <span>TVA (20%)</span>
+      <span>TVA (18%)</span>
       <span>{(parseFloat(montantTotal) * 0.2).toFixed(2)} FCFA</span>
     </div>
     <div className="flex justify-between font-bold text-lg">

@@ -14,22 +14,10 @@ interface ClientInfoProps {
 
 const ClientInfo: React.FC<ClientInfoProps> = ({ TelEntreprise, AdresseEntreprise, Nom, AdresseClient, ContacteClient,  onChange }) => (
   <div className='display flex justify-between'>
-    <div className=" rounded-b-lg border-solid border-2 border-black">
+    <div className=" rounded-b-lg ">
     
-      <FormInput
-          label="Adresse Entreprise *"
-          name="AdresseEntreprise"
-          value={AdresseEntreprise}
-          onChange={onChange}
-          required
-        />
-        <FormInput
-          label="Contacte *"
-          name="TelEntreprise"
-          value={TelEntreprise}
-          onChange={onChange}
-          required
-        />
+    <h3>Adresse Entreprise: 3k&Fils@gmail.com</h3>
+    <h4>Contacte: 0194532053</h4>
     
     </div>
     <div className=" rounded-b-lg border-solid border-2 border-black">
@@ -53,6 +41,13 @@ const ClientInfo: React.FC<ClientInfoProps> = ({ TelEntreprise, AdresseEntrepris
           <FormInput
           label="ContacteClient*"
           name="ContacteClient"
+          value={ContacteClient}
+          onChange={onChange}
+          required
+        />
+        <FormInput
+          label="IFU*"
+          name="IFU"
           value={ContacteClient}
           onChange={onChange}
           required

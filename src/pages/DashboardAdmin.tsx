@@ -12,16 +12,17 @@ const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
 
   const stats = [
-    { title: 'Total des devis envoyé ', value: '200', icon: '📄' },
-    { title: 'Factures impayé', value: '567', icon: '📄' },
-    { title: 'Facture Payé', value: '50', icon: '💰' },
+    { title: 'Total des devis', value: '01', icon: '📄' },
+    { title: 'Factures impayé', value: '02', icon: '📄' },
+    { title: 'Facture Payé', value: '01', icon: '💰' },
   ];
 
-  const recentClients = [
-    { id: 1, name: 'Kassandra KAKANAKOU', email: 'Kassandra@kakanakougmail.cm', status: 'Actif' },
-    { id: 2, name: 'HOULO Ruth-Esther', email: 'HOULO@RuthEsthergmail.cm', status: 'Inactif' },
-    { id: 3, name: 'Doassa Luc', email: 'Doassa@Lucgmail.cm', status: 'Actif' },
-  ];
+ const recentClients = [
+  { id: 1, nom: 'KAKANAKOU', prenom: 'Kassandra', mail: 'Kassandra@kakanakougmail.cm' },
+  { id: 2, nom: 'HOULO', prenom: 'Ruth-Esther', mail: 'HOULO@RuthEsthergmail.cm' },
+  { id: 3, nom: 'Doassa', prenom: 'Luc', mail: 'Doassa@Lucgmail.cm' },
+];
+
 
   const handleLogout = () => {
     console.log('Déconnexion');

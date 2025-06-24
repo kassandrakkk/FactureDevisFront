@@ -97,7 +97,7 @@ console.log('📥 Réponse brute :', response.data);
         console.log(' SUCCÈS - Redirection vers /configCompte');
         // Forcer la redirection avec un petit délai pour s'assurer que tout est traité
         setTimeout(() => {
-          navigate('/configCompte', { replace: true });
+          navigate('/Code', { replace: true });
         }, 100);
       } else {
         console.log(' ÉCHEC :', jsonData);

@@ -238,7 +238,7 @@ const CreateArticle: React.FC = () => {
               {/* Prix et TVA */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormInput
-                  label="Prix Unitaire (€) *"
+                  label="Prix Unitaire (FCFA) *"
                   name="prix_unitaire"
                   value={formData.prix_unitaire}
                   onChange={handleInputChange}
@@ -270,7 +270,7 @@ const CreateArticle: React.FC = () => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex justify-between items-center">
                   <span className="text-blue-800 font-medium">Prix TTC calculé :</span>
-                  <span className="text-2xl font-bold text-blue-900">{prixTTC} €</span>
+                  <span className="text-2xl font-bold text-blue-900">{prixTTC} FCFA</span>
                 </div>
                 {parseFloat(formData.prix_unitaire) > 0 && parseFloat(formData.taux_tva) >= 0 && (
                   <div className="text-sm text-blue-600 mt-2">
@@ -317,11 +317,11 @@ const CreateArticle: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-gray-600">Prix HT:</span>
-                    <span className="ml-2 font-medium">{formData.prix_unitaire || '0.00'} €</span>
+                    <span className="ml-2 font-medium">{formData.prix_unitaire || '0.00'} FCFA</span>
                   </div>
                   <div>
                     <span className="text-gray-600">Prix TTC:</span>
-                    <span className="ml-2 font-bold text-green-600">{prixTTC} €</span>
+                    <span className="ml-2 font-bold text-green-600">{prixTTC} FCFA</span>
                   </div>
                 </div>
                 {formData.description && (

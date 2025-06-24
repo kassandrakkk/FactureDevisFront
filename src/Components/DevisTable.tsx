@@ -39,7 +39,11 @@ const DevisTable: React.FC<DevisTableProps> = ({ lignes, onLigneChange, addLigne
                 options={[
                   { value: 'Chips', label: 'Chips' },
                   { value: 'Aklui', label: 'Aklui' },
+                  { value: 'Poisson Séché', label: 'Poisson Séché' },
+                  { value: 'Jus', label: 'Jus' },
+                  { value: 'Légume Sécher', label: 'Légume Sécher' },
                   { value: 'Orange', label: 'Orange' },
+                  { value: 'Pain', label: 'Pain' },
                 ]}
                 required
               />
@@ -74,8 +78,8 @@ const DevisTable: React.FC<DevisTableProps> = ({ lignes, onLigneChange, addLigne
           <td className="p-2 text-right">{montantTotal} FCFA</td>
         </tr>
         <tr className="bg-gray-100 font-bold">
-          <td colSpan={4} className="p-2 text-right">TVA 20%</td>
-          <td className="p-2 text-right">{(parseFloat(montantTotal) * 0.2).toFixed(2)} FCFA</td>
+          <td colSpan={4} className="p-2 text-right">TVA 18%</td>
+          <td className="p-2 text-right">{(parseFloat(montantTotal) * 0.18).toFixed(2)} FCFA</td>
         </tr>
         <tr className="bg-gray-100 font-bold">
           <td colSpan={4} className="p-2 text-right">TOTAL TTC</td>

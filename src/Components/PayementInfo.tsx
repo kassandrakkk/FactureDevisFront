@@ -33,6 +33,7 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({
       options={[
         { value: 'VirementBancaire', label: 'Virement bancaire' },
         { value: 'Momo', label: 'Momo' },
+        { value: 'Espece', label: 'Espece' },
       ]}
       required
     />

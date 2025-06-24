@@ -1,11 +1,11 @@
-
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // ✅ ajout de useNavigate
 
 const EnterVerificationCode: React.FC = () => {
-  const [digits, setDigits] = useState<string[]>(['', '', '', '','']);
-  const [timer, setTimer] = useState<number>(300); // 5min 
+  const [digits, setDigits] = useState<string[]>(['', '', '', '', '']);
+  const [timer, setTimer] = useState<number>(300); // 5min
+  const navigate = useNavigate(); // ✅ hook de navigation
 
   useEffect(() => {
     if (timer > 0) {
@@ -17,13 +17,11 @@ const EnterVerificationCode: React.FC = () => {
   }, [timer]);
 
   const handleChange = (index: number, value: string) => {
-    if (/^\d?$/.test(value)) { // Autorise 0 ou 1 chiffre
+    if (/^\d?$/.test(value)) {
       const newDigits = [...digits];
       newDigits[index] = value;
       setDigits(newDigits);
-
-      // Passe au champ suivant si un chiffre est saisi
-      if (value && index < 3) {
+      if (value && index < 4) {
         const nextInput = document.getElementById(`digit-${index + 1}`);
         if (nextInput) nextInput.focus();
       }
@@ -40,18 +38,15 @@ const EnterVerificationCode: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const code = digits.join('');
-    if (code.length === 4) {
-      // pour vérifier le code (appel API à Laravel)
-      console.log('Code soumis:', code);
-    } else {
-      alert('Veuillez entrer un code à 5 chiffres.');
-    }
+    console.log('Code soumis:', code);
+
+    // ✅ Redirection automatique sans vérification
+    navigate('/DashboardAdmin');
   };
 
   const resendCode = () => {
-    // pour renvoyer le code (appel API à Laravel)
     console.log('Renvoyer le code à l\'email');
-    setTimer(300); // Réinitialiser le compte à rebours
+    setTimer(300);
   };
 
   return (
@@ -59,7 +54,7 @@ const EnterVerificationCode: React.FC = () => {
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-center">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Enter verification code</h2>
         <p className="text-gray-600 mb-6">
-          Code de vérification envoyé par mail{' '}
+          Nous avons en envoyé un code de vérification envoyé par mail{' '}
           <span className="font-semibold text-blue-600">kassandrakakanakou@gmail.com</span>
         </p>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -84,7 +79,6 @@ const EnterVerificationCode: React.FC = () => {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300"
-            disabled={digits.some((d) => !d)} 
           >
             Verify
           </button>

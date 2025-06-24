@@ -198,7 +198,7 @@ const ArticleList: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="text-sm font-semibold text-gray-900">
-                            {parseFloat(article.prix_unitaire).toFixed(2)} €
+                            {parseFloat(article.prix_unitaire).toFixed(2)} FCFA
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">

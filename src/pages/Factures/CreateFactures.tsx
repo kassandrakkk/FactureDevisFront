@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../Components/Sidebar';
@@ -9,6 +8,8 @@ import DevisTable from '../../Components/DevisTable';
 import ClientInfo from '../../Components/ClientInfo';
 import FormInput from '../../Components/FormInput';
 import FormSelect from '../../Components/FormSelect';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface FactureFormData {
   numeroFacture: string;
@@ -34,7 +35,7 @@ const AddFacture: React.FC = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState<FactureFormData>({
-    numeroFacture: 'FAC-001',
+    numeroFacture: `FAC-${Date.now().toString().slice(-6)}`,
     clientId: '',
     entrepriseId: '',
     userId: '',
@@ -47,7 +48,9 @@ const AddFacture: React.FC = () => {
     paiementUrl: '',
   });
 
-  const [ligneFacture, setLigneFacture] = React.useState<LigneFacture[]>([{ articleId: '', quantite: '1', prixUnitaire: '' }]);
+  const [ligneFacture, setLigneFacture] = React.useState<LigneFacture[]>([
+    { articleId: '', quantite: '1', prixUnitaire: '' },
+  ]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -64,11 +67,11 @@ const AddFacture: React.FC = () => {
     const newLignes = [...ligneFacture];
     newLignes[index] = { ...newLignes[index], [name]: value };
     setLigneFacture(newLignes);
-    // Recalculer le montant total
+
     const total = newLignes.reduce((sum, ligne) => {
       const prix = parseFloat(ligne.prixUnitaire) || 0;
       const qty = parseInt(ligne.quantite) || 0;
-      return sum + (prix * qty);
+      return sum + prix * qty;
     }, 0);
     setFormData((prev) => ({ ...prev, montantTotal: total.toFixed(2) }));
   };
@@ -80,16 +83,46 @@ const AddFacture: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Facture soumise:', { formData, ligneFacture });
-    navigate('/factures');
+    navigate('/ListeFactures');
   };
 
-  const handleExport = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const exportType = e.target.value;
-    if (exportType) {
-      console.log(`Exportation en ${exportType} déclenchée pour la facture:`, formData);
-      // Ajoutez ici la logique d'exportation (par exemple, générer un fichier PDF/Excel)
-      // Exemple : window.open(`export.php?type=${exportType}&data=${JSON.stringify(formData)}`);
-    }
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text('Facture', 14, 22);
+    doc.setFontSize(12);
+    doc.text(`Numéro: ${formData.numeroFacture}`, 14, 32);
+    doc.text(`Date: ${formData.dateCreation}`, 14, 38);
+    doc.text(`Client: ${formData.clientId}`, 14, 44);
+    doc.text(`Statut: ${formData.statut}`, 14, 50);
+    
+    const tableData = ligneFacture.map((ligne, index) => [
+      index + 1,
+      ligne.articleId,
+      ligne.quantite,
+      ligne.prixUnitaire,
+      (parseFloat(ligne.prixUnitaire) * parseInt(ligne.quantite)).toFixed(2),
+    ]);
+
+    autoTable(doc, {
+      startY: 60,
+      head: [['#', 'Article', 'Quantité', 'Prix Unitaire', 'Total']],
+      body: tableData,
+    });
+
+    doc.setFontSize(14);
+    doc.text(`Montant TOTAL (TTC): ${formData.montantTotal} FCFA`, 14, doc.lastAutoTable.finalY + 10);
+    doc.save(`${formData.numeroFacture}.pdf`);
+  };
+
+  const exportToExcel = () => {
+    const csvContent = `Numero Facture,Client ID,Date Creation,Date Expiration,Montant Total,Statut\n${formData.numeroFacture},${formData.clientId},${formData.dateCreation},${formData.dateExpiration},${formData.montantTotal},${formData.statut}`;
+    const file = new Blob([csvContent], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(file);
+    link.download = `${formData.numeroFacture}.csv`;
+    link.click();
   };
 
   return (
@@ -107,13 +140,13 @@ const AddFacture: React.FC = () => {
         </header>
 
         <div className="bg-white rounded-lg shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 p-6">
             <DevisHeader
               numero={formData.numeroFacture}
               type="Facture"
               dateCreation={formData.dateCreation}
-              societe="3K&fils" // Remplacez par votre nom de société
-              activite="Votre activité" // Remplacez par votre activité
+              societe="3K&fils"
+              activite="Votre activité"
             />
             <ClientInfo clientId={formData.clientId} onChange={handleInputChange} />
             <DevisTable
@@ -125,7 +158,7 @@ const AddFacture: React.FC = () => {
             <TotalSection montantTotal={formData.montantTotal} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput
-                label="Date de Création *"
+                label="Date de Création"
                 name="dateCreation"
                 value={formData.dateCreation}
                 onChange={handleInputChange}
@@ -133,7 +166,7 @@ const AddFacture: React.FC = () => {
                 required
               />
               <FormInput
-                label="Date d'Expiration *"
+                label="Date d'Echeance"
                 name="dateExpiration"
                 value={formData.dateExpiration}
                 onChange={handleInputChange}
@@ -152,7 +185,6 @@ const AddFacture: React.FC = () => {
                 ]}
                 required
               />
-
             </div>
             <PaymentInfo
               dateCreation={formData.dateCreation}
@@ -162,19 +194,22 @@ const AddFacture: React.FC = () => {
               signatureUrl={formData.paiementUrl}
               onCheckboxChange={handleCheckboxChange}
             />
-            <div className="flex justify-end space-x-4">
-              <div className="px-4 py-2 bg-green-600 text-black rounded-md hover:bg-green-700">
-                <FormSelect
-                  label=""
-                  name="exportType"
-                  value=""
-                  onChange={handleExport}
-                  options={[
-                    { value: 'Exporter en PDF', label: 'Exporter en PDF' },
-                    { value: 'Exporter en Excel', label: 'Exporter en Excel' },
-                  ]}
-                />
-              </div>
+
+            <div className="flex justify-end space-x-4 pt-6">
+              <button
+                type="button"
+                onClick={exportToPDF}
+                className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
+              >
+                📄 Exporter en PDF
+              </button>
+              <button
+                type="button"
+                onClick={exportToExcel}
+                className="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors"
+              >
+                📊 Exporter en Excel
+              </button>
               <button
                 type="submit"
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
@@ -190,4 +225,3 @@ const AddFacture: React.FC = () => {
 };
 
 export default AddFacture;
-

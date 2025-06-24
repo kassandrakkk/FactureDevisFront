@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link to="/admin/invoices" className="flex items-center text-gray-600 hover:text-blue-600">
+            <Link to="/parametre" className="flex items-center text-gray-600 hover:text-blue-600">
               <span className="mr-2">⚙️</span> Paramètre
             </Link>
           </li>

@@ -21,6 +21,7 @@ import CreateClient from './pages/Clients/CreateClient';
 import UpdateClient from './pages/Clients/UpdateClient';
 import HistEdit from './pages/Historique/HistEdit'
 import Home from './pages/Accueil';
+import Parametre from './pages/Auth/Parametre';
 function App() {
   console.log('Rendering App component');
   return (
@@ -30,7 +31,8 @@ function App() {
       <Route path="/connexion" element={<Connexion />} />
       <Route path="/MDPOublié" element={<MDPOublié/>} />
       <Route path="/ConfigCompte" element={<ConfigCompte />} />
-       <Route path="/Vérification" element={<Verification />} />
+       <Route path="/parametre" element={<Parametre />} />
+       <Route path="/Verification" element={<Verification />} />
         <Route path="/DashboardAdmin" element={<DashboardAdmin/>} />
         <Route path="/CreateDevis" element={<CreateDevis/>} />
         <Route path="/ListeDevis" element={<ListeDevis/>} />
